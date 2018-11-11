@@ -1,0 +1,9 @@
+[Unit]
+Description=A daemon providing a hardware/software interface to the raspicam command line utility
+Documentation=https://github.com/tesseract241/raspberryCameraService
+DefaultDependencies=true
+[Install]
+WantedBy=multi-user.target
+[Service]
+ExecStart=/usr/sbin/cameraservice
+Restart=always
