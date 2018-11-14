@@ -62,7 +62,7 @@ int main(){
 	signal(SIGUSR2, usr2_handler);
 	signal(SIGALRM, usr1_alrm_handler);
 	wiringPilSR(BUTTON_PIN, INT_EDGE_BOTH, button_click_handler);
-	wiringPilSR(MOTION_SENSOR_PIN, INT_EDGE_FALLING, take_picture_handler); 	// Need to check whether the motion sensor makes the voltage fall or rise
+	wiringPilSR(MOTION_SENSOR_PIN, INT_EDGE_RISING, take_picture_handler);
 	
 	// sigprocmask blocks the signals that we use so that we can safely check the global variables that their handlers check
 	// sigsuspend unblocks those signals and makes the process sleep until they arrive, at which point it blocks them again, so that we can once again check them and,
