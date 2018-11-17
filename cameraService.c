@@ -1,15 +1,16 @@
 #include <stdlib.h>
-#include "Wire.h"
-#include "Button.h"
+#include <stdio.h>
+#include <wiringPi.h>
 #include <time.h>
+#include <unistd.h>
 #include <signal.h>
 
-#define BUTTON_PIN 18
-#define MOTION_SENSOR_PIN 17
+#define BUTTON_PIN 12
+#define MOTION_SENSOR_PIN 13
 #define HOLDING_TIME 2
 
-volatile bool take_picture_check = FALSE;
-volatile bool show_video_check = FALSE;
+volatile _Bool take_picture_check = FALSE;
+volatile _Bool show_video_check = FALSE;
 
 volatile bool is_button_pressed = FALSE;
 
@@ -39,15 +40,15 @@ void take_picture_handler(){
 
 void show_video(){
 	// screenON(); // To be added when I get the display and can write code for it
-	system("raspivid -w 1280 -h 720 -ex auto -awb")
+	system("raspivid -w 1280 -h 720 -ex auto -awb");
 	// screenOFF(5); // To be added when I get the display and can write code for it
 }
 
 void take_picture(){
 	time_t t = time(NULL);
 	char filename[15], buf[70]; // It should be 67, better to be safe
-	strftime(&filename, 15, "%Y%m%d%H%M%S", localtime(&t));
-	snprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -t 0 -o %s.png", &filename);
+	strftime(filename, 15, "%Y%m%d%H%M%S", localtime(&t));
+	sprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -t 0 -o %s.png", filename);
 	system(&buf);
 }
 
@@ -61,8 +62,8 @@ int main(){
 	signal(SIGUSR1,usr1_alrm_handler);
 	signal(SIGUSR2, usr2_handler);
 	signal(SIGALRM, usr1_alrm_handler);
-	wiringPilSR(BUTTON_PIN, INT_EDGE_BOTH, button_click_handler);
-	wiringPilSR(MOTION_SENSOR_PIN, INT_EDGE_RISING, take_picture_handler);
+	wiringPiISR(BUTTON_PIN, INT_EDGE_BOTH, button_click_handler);
+	wiringPiISR(MOTION_SENSOR_PIN, INT_EDGE_FALLING, take_picture_handler); 	// Need to check whether the motion sensor makes the voltage fall or rise
 	
 	// sigprocmask blocks the signals that we use so that we can safely check the global variables that their handlers check
 	// sigsuspend unblocks those signals and makes the process sleep until they arrive, at which point it blocks them again, so that we can once again check them and,
