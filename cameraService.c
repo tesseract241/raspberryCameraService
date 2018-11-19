@@ -7,7 +7,8 @@
 
 #define BUTTON_PIN 12
 #define MOTION_SENSOR_PIN 13
-#define HOLDING_TIME 2000 // In microseconds
+#define HOLDING_TIME 2 
+#define VIDEO_LENGTH 5000 // In milliseconds
 
 volatile _Bool take_picture_check = FALSE;
 volatile _Bool show_video_check = FALSE;
@@ -26,7 +27,7 @@ void usr2_handler(int signum){
 void button_click_handler(){
 	is_button_pressed=!is_button_pressed;
 	if(is_button_pressed){
-		alarm(HOLDING_TIME/1000);
+		alarm(HOLDING_TIME);
 		raise(SIGUSR1);
 	}
 	else{
@@ -40,7 +41,7 @@ void take_picture_handler(){
 
 void show_video(){
 	// screenON(); // To be added when I get the display and can write code for it
-	system("raspivid -f -w 480 -h 320 -ex auto -t HOLDING_TIME");
+	system("raspivid -f -w 480 -h 320 -ex auto -t VIDEO_LENGTH");
 	// screenOFF(5); // To be added when I get the display and can write code for it
 }
 
