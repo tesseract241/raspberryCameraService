@@ -8,7 +8,7 @@
 #define BUTTON_PIN 12
 #define MOTION_SENSOR_PIN 13
 #define HOLDING_TIME 2 
-#define VIDEO_LENGTH 5000 // In milliseconds
+#define VIDEO_LENGTH "5000" // In milliseconds
 
 volatile _Bool take_picture_check = FALSE;
 volatile _Bool show_video_check = FALSE;
@@ -41,15 +41,15 @@ void take_picture_handler(){
 
 void show_video(){
 	// screenON(); // To be added when I get the display and can write code for it
-	system("raspivid -f -w 480 -h 320 -ex auto -t VIDEO_LENGTH");
+	system("raspivid -f -w 480 -h 320 -ex auto -t " VIDEO_LENGTH);
 	// screenOFF(5); // To be added when I get the display and can write code for it
 }
 
 void take_picture(){
 	time_t t = time(NULL);
-	char filename[15], buf[70]; // It should be 67, better to be safe
+	char filename[15], buf[75]; // It should be 67, better to be safe
 	strftime(filename, 15, "%Y%m%d%H%M%S", localtime(&t));
-	sprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -t 10 -o %s.png", filename);
+	sprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -n -t 100 -o %s.png", filename);
 	system(buf);
 }
 
