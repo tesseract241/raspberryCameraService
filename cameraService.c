@@ -7,12 +7,12 @@
 
 #define BUTTON_PIN 12
 #define MOTION_SENSOR_PIN 13
-#define HOLDING_TIME 2
+#define HOLDING_TIME 2000 // In microseconds
 
 volatile _Bool take_picture_check = FALSE;
 volatile _Bool show_video_check = FALSE;
 
-volatile bool is_button_pressed = FALSE;
+volatile _Bool is_button_pressed = FALSE;
 
 
 void usr1_alrm_handler(int signum){
@@ -26,7 +26,7 @@ void usr2_handler(int signum){
 void button_click_handler(){
 	is_button_pressed=!is_button_pressed;
 	if(is_button_pressed){
-		alarm(HOLDING_TIME);
+		alarm(HOLDING_TIME/1000);
 		raise(SIGUSR1);
 	}
 	else{
@@ -40,7 +40,7 @@ void take_picture_handler(){
 
 void show_video(){
 	// screenON(); // To be added when I get the display and can write code for it
-	system("raspivid -w 1280 -h 720 -ex auto -awb");
+	system("raspivid -f -w 480 -h 320 -ex auto -t HOLDING_TIME");
 	// screenOFF(5); // To be added when I get the display and can write code for it
 }
 
@@ -48,8 +48,8 @@ void take_picture(){
 	time_t t = time(NULL);
 	char filename[15], buf[70]; // It should be 67, better to be safe
 	strftime(filename, 15, "%Y%m%d%H%M%S", localtime(&t));
-	sprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -t 0 -o %s.png", filename);
-	system(&buf);
+	sprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -t 10 -o %s.png", filename);
+	system(buf);
 }
 
 int main(){
