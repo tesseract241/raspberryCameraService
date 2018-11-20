@@ -1,5 +1,5 @@
 #!/bin/bash
-BUTTON_PIN=18; MOTION_SENSOR_PIN=17
+BUTTON_PIN=1; MOTION_SENSOR_PIN=0
 gpio export BUTTON_PIN in
 gpio export MOTION_SENSOR_PIN in
 gpio mode BUTTON_PIN up
