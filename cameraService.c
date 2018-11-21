@@ -11,7 +11,6 @@
 #define VIDEO_LENGTH "5000" // In milliseconds
 
 volatile _Bool take_picture_check = FALSE;
-volatile _Bool show_video_check = FALSE;
 
 volatile _Bool is_button_pressed = FALSE;
 
@@ -53,7 +52,7 @@ int main(){
 	sigset_t mask, oldmask;
 	sigemptyset(&mask);
 	sigaddset(&mask, SIGALRM);
-	signal(SIGUSR1, alrm_handler);
+	signal(SIGALRM, alrm_handler);
 	wiringPiISR(BUTTON_PIN, INT_EDGE_BOTH, button_click_handler);
 	wiringPiISR(MOTION_SENSOR_PIN, INT_EDGE_FALLING, take_picture);
 	
