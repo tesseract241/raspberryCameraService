@@ -20,18 +20,6 @@ void alrm_handler(int signum){
 	take_picture_check = TRUE;
 }
 
-void button_click_handler(){
-//wiringPi interrupts run in a normal thread, not in ISR context, so all of these calls are fine.
-	is_button_pressed=!is_button_pressed;
-	if(is_button_pressed){
-		alarm(HOLDING_TIME);
-//Even if the alarm goes off while show_video is still running is fine, as we are in a normal context.
-		show_video();
-	}
-	else{
-		alarm(0);
-	}
-}
 
 void show_video(){
 	// screenON(); // To be added when I get the display and can write code for it
@@ -45,6 +33,19 @@ void take_picture(){
 	strftime(filename, 15, "%Y%m%d%H%M%S", localtime(&t));
 	sprintf(buf, "raspistill -w 1920 -h 1080 -q 75 -e png -n -t 100 -o %s.png", filename);
 	system(buf);
+}
+
+void button_click_handler(){
+//wiringPi interrupts run in a normal thread, not in ISR context, so all of these calls are fine.
+	is_button_pressed=!is_button_pressed;
+	if(is_button_pressed){
+		alarm(HOLDING_TIME);
+//Even if the alarm goes off while show_video is still running is fine, as we are in a normal context.
+		show_video();
+	}
+	else{
+		alarm(0);
+	}
 }
 
 int main(){
