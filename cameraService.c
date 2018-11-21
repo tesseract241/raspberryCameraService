@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define BUTTON_PIN 18
+#define BUTTON_PIN 27
 #define MOTION_SENSOR_PIN 17
 #define HOLDING_TIME 2 
 #define VIDEO_LENGTH "5000" // In milliseconds
