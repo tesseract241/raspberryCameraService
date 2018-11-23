@@ -5,13 +5,13 @@
 #include <unistd.h>
 #include <signal.h>
 
-#define BUTTON_PIN 27
+#define BUTTON_PIN 21
 #define MOTION_SENSOR_PIN 17
 #define HOLDING_TIME 2 
 #define VIDEO_LENGTH "5000" // In milliseconds
 
 volatile _Bool link_frame_check 	= FALSE;
-volatile _Bool show_video_check	= FALSE;
+volatile _Bool show_video_check		= FALSE;
 
 volatile _Bool is_button_pressed 	= FALSE;
 
@@ -79,12 +79,12 @@ int main(){
 	while(1){
 		while(!link_frame_check && !show_video_check) {sigsuspend(&oldmask);}
 			if(link_frame_check){
-				link_frame();
 				link_frame_check 	= FALSE;
+				link_frame();
 			}
 			else{
-				show_video();
 				show_video_check 	= FALSE;
+				show_video();
 			}
 	}
 }
