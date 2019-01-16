@@ -28,7 +28,7 @@ void sigusr1_handler(int signum){
 void show_video(){
 	// screenON(); // To be added when I get the display and can write code for it
 	system("fbcp &");
-	system("raspivid -f -w 1920 -h 1080 -ex auto -t " VIDEO_LENGTH);
+	system("raspivid -f -p 0, 0, 480, 360 -w 1920 -h 1080 -ex auto -t " VIDEO_LENGTH);
 	system("pkill fbcp");
 	// screenOFF(5); // To be added when I get the display and can write code for it
 }
